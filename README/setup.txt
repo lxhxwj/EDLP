@@ -1,0 +1,39 @@
+一、必须安装的软件
+1、python(配置python环境变量)
+2、autoit
+3、pywin32
+二、安装python模块
+1、python -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple --upgrade pip
+2、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple requests
+3、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple selenium
+4、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple paramiko
+5、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple xlrd
+6、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple xlwt
+7、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple python-docx
+8、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple python-pptx
+9、pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pygame
+三、将Autoit.exe进程添加到加密进程列表中
+四、天擎-设置-防护中心-开发者模式，将DLP目录添加进去
+五、天擎主页-病毒扫描-信任区，将DLP目录添加进去
+
+六、安装STAF。将STAX解压到 $STAF_Install_Directory\stax 目录中，然后更改 STAF 的配置文件 STAF.cfg。此文件在 $STAF_Install_Directory\bin 目录下。 在 STAF.cfg 文件末尾加上如下的代码，然后重启 STAF。
+
+SERVICE STAX LIBRARY JSTAF EXECUTE \
+  {STAF/Config/STAFRoot}/stax/STAX.jar  OPTION J2=-Xmx384m
+SERVICE EVENT LIBRARY JSTAF EXECUTE \
+  {STAF/Config/STAFRoot}/stax/STAFEvent.jar
+SET MAXQUEUESIZE 10000
+
+七、添加环境变量     C:\STAF\bin;C:\STAF\jre\bin
+
+八、将STAF添加为自启动服务
+1、首先使用 instsrv 命令注册一个基本的服务 STAF："C:\STAF\instsrv.exe" STAF "C:\STAF\srvany.exe"。
+2、打开注册表编辑器(regedit)，找到键值 My Computer\HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\STAF。在 STAF 下创建一个键，名字为 Parameters，执行Parameters.reg
+3、在 Parameters 键下面，创建一个字符串值（String Value），名字为 Application，值为 STAFProc 的完整路径，比如 C:\STAF\bin\STAFProc.exe。
+4、使用命令services.msc启动Windows服务窗口，找到STAF，右键选择属性，然后定位到登录窗口，选择“允许服务与桌面交互”。
+5、使用命令net start staf或者重启机器来启动STAF服务。
+6、使用命令staf local service list来验证STAF是否已经成功启动。
+
+九、手动执行runas /savecred /user:Administrator "cmd"命令
+十、关闭windows系统uac控制（如何关闭百度搜索）
+十一、调试时需要开启Interactive Services Detection，启动该服务时可能报参数错误，导入注册表信息执行NointeractiveServices.reg
