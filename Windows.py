@@ -387,7 +387,7 @@ class Window:
 					else:
 						print("FALSE")
 				else:
-					print("最大可设置500")
+					print("最大可设置10000")
 
 			root.destroy()
 			return True
@@ -448,10 +448,55 @@ class Window:
 			root.destroy()
 			return True
 
-		Button(root, text="生成文件", command = on_click).pack(side=LEFT)
+		Button(root, text="TELNET", command = on_click).pack(side=LEFT)
 
 		root.mainloop()
+	def CreateCardWindow(self):
 
+		root = Tk()
+		#设置标题
+		root.title("")
+		#设置窗口的大小宽x高+偏移量
+		root.geometry('130x30+900+500')
+		#禁止调整窗口大小
+		#root.resizable(0, 0)
+		#设置窗口图标
+		#root.iconbitmap('img\mainlogo.ico')
+
+		root.overrideredirect(True) #清除所有的tkinters窗口选项
+		#root.attributes('-disabled', True) #防止与窗口中的任何用户交互
+
+		root.wm_attributes('-topmost',1) #置顶窗口
+
+		l2 = Label(root, text="生成数量",bg = 'red')
+		l2.pack(side=LEFT)
+		num2 = StringVar()
+		txt2 = Entry(root, width=5,borderwidth=2, textvariable = num2)
+		num2.set("1")
+		txt2.pack(side=LEFT)
+
+
+		def on_click():
+			ret = True
+			app = control()
+			y = num2.get()
+			if y is not None:
+				n = int(y)
+				if 0 < n <= 10000:
+					ret = app.genfaker(n)
+					if ret:
+						print("OK")
+					else:
+						print("FALSE")
+				else:
+					print("最大可设置10000")
+
+			root.destroy()
+			return True
+
+		Button(root, text="生成", command = on_click).pack(side=LEFT)
+
+		root.mainloop()
 if __name__ == "__main__":
 	w = Window()
 	def usage():
@@ -465,6 +510,7 @@ if __name__ == "__main__":
         	-6 ：CreatePdfWindow\n\
         	-7 ：CreateGenSizeWindow\n\
         	-8 : CreateTelnetWindow\n\
+        	-9 : CreateCardWindow\n\
         	-v or --version：显示版本\
         	')
 	if len(sys.argv) == 1:
@@ -472,7 +518,7 @@ if __name__ == "__main__":
 		sys.exit()
 
 	try:
-		opts, args = getopt.getopt(sys.argv[1:], "h12345678v", ["help", "version"])
+		opts, args = getopt.getopt(sys.argv[1:], "h123456789v", ["help", "version"])
 	except getopt.GetoptError:
 		usage()        
 
@@ -495,5 +541,7 @@ if __name__ == "__main__":
 			w.CreateGenSizeWindow()
 		elif cmd in ("-8", "1"):
 			w.CreateTelnetWindow()
+		elif cmd in ("-9", "1"):
+			w.CreateCardWindow()
 		elif cmd in ("-v", "--version"):
 			print("version 1.0")

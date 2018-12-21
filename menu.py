@@ -246,6 +246,20 @@ def h44():
         t.insert(END,"| (带附件的邮件测试)SMTPATTACH FAIL |\n")
         t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
         t.update()
+def h444():
+    ret = True
+    #s = control()
+    #ret = s.smtp('dlptest1','dlptest2',"wangbaoqiang王宝强","wangbaoqiang王宝强")
+    s = SMTP()
+    ret = s.SmtpsAttach()
+    if ret:
+        t.insert(END,"| (带附件的邮件测试)SMTPSATTACH OK |\n")
+        t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
+        t.update()
+    else:
+        t.insert(END,"| (带附件的邮件测试)SMTPSATTACH FAIL |\n")
+        t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
+        t.update()
 def h5():
     ret = True
     ftp = control()
@@ -605,6 +619,17 @@ def n15():
         t.update()
     finally:
         t.insert(END,"| CreateGenSizeWindow OK |\n")
+        t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
+        t.update()
+def n16():
+    try:
+        os.system("Windows.py -9")
+    except Exception as e:
+        t.insert(END,"| CreateCardWindow FAIL |\n")
+        t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
+        t.update()
+    finally:
+        t.insert(END,"| CreateCardWindow OK |\n")
         t.insert(END,"|--------------------------------------------------------------------------------------------------------------------------------|\n")
         t.update()
 def o1():
@@ -2363,6 +2388,7 @@ filemenu.add_command(label="FTP上传文件", command=h3)
 filemenu.add_command(label="SFTP上传文件", command=h33)
 filemenu.add_command(label="SMTP-无附件", command=h4)
 filemenu.add_command(label="SMTP-带附件", command=h44)
+filemenu.add_command(label="SMTPS-带附件", command=h444)
 filemenu.add_command(label="移动存储", command=h5)
 filemenu.add_command(label="外挂磁盘(仅在116上运行)", command=h55)
 filemenu.add_command(label="网络共享", command=h6)
@@ -2406,6 +2432,7 @@ netmenu.add_command(label="随机创建TXT文件(文件输出位置DLP\Result)",
 netmenu.add_command(label="随机创建PNG文件，用于测试OCR识别(文件输出位置DLP\Result)", command=n13)
 netmenu.add_command(label="随机创建PDF文件(文件输出位置DLP\Result)", command=n14)
 netmenu.add_command(label="随机创建指定大小TXT文件(文件输出位置DLP\Result)", command=n15)
+netmenu.add_command(label="随机生成电话|身份证|银行卡号(文件输出位置DLP\Result)", command=n16)
 netmenu.add_separator()
 netmenu.add_command(label="Exit", command=kill)
 menubar.add_cascade(label="功能控制", menu=netmenu)

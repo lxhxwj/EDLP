@@ -52,7 +52,63 @@ class SMTP:
             print "SMTP False" 
             return False
         return
+    def SmtpsAttach(self):
+        HOST = "smtp.126.com" #定义smtp主机
+        SUBJECT = "test-smtps" #定义邮件主题
+        TO = "datasec360@126.com" #定义邮件收件人
+        FROM = "datasec360@126.com" #定义邮件发件人
+        '''
+        text = "python test mail" #邮件的内容
+        BODY=string.join(( #组装sendmail方法的邮件主体内容，各段以"\r\n"进行分隔
+        "From:%s" %FROM,
+        "To:%s" %TO,
+        "Subject:%s"%SUBJECT,
+        "",
+        text
+        ),"\r\n")
+        '''
+        message = MIMEMultipart()
+        message['From'] = "datasec360@126.com"
+        message['To'] = "datasec360@126.com"
+        message['Subject'] = "test-smtps"
 
+        with open('file\\index.html','r') as f:
+            content = f.read()
+
+        part1 = MIMEText(content,'html','utf-8')
+
+        with open('file\\dlp.txt','r')as h:
+            content2 = h.read()
+
+        part2 = MIMEText(content2,'plain','utf-8')
+
+        part2['Content-Type'] = 'application/octet-stream'
+
+        part2['Content-Disposition'] = 'attachment;filename="dlp.txt"'
+
+        with open('file\\att.png','rb')as fp:
+            picture = MIMEImage(fp.read())
+
+            picture['Content-Type'] = 'application/octet-stream'
+            picture['Content-Disposition'] = 'attachment;filename="att.png"'
+
+        message.attach(part1)
+        message.attach(part2)
+        message.attach(picture)
+        try:
+            server = smtplib.SMTP() #创建一个SMTP对象
+            server.connect(HOST,"25") #通过connect方法连接smtp主机
+            #server.starttls() #启动安全传输模式
+            s = smtplib.SMTP_SSL(HOST)
+            s.login("datasec360@126.com","Aa123456") #邮件账户登录校验
+            #server.sendmail(FROM,TO,BODY) #邮件发送
+            s.sendmail(FROM,TO,message.as_string())
+            s.quit() #断开smtp连接
+            print(u"邮件发送成功")
+            return True
+        except smtplib.SMTPException as e:
+            print(u'邮件发送失败',e)
+            return False
     def SmtpAttach(self):
         ret = True
         try:
@@ -310,7 +366,7 @@ if __name__ == "__main__":
         sys.exit()
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hmv", ["help", "output="])
+        opts, args = getopt.getopt(sys.argv[1:], "hmsv", ["help", "output="])
     except getopt.GetoptError:
         usage()        
 
@@ -319,5 +375,7 @@ if __name__ == "__main__":
             usage()
         elif cmd in ("-m", "1"):
             app.SMTPTest()
+        elif cmd in ("-s", "1"):
+            app.SmtpsAttach()       
         elif cmd in ("-v", "--version"):
             print("version 1.0")

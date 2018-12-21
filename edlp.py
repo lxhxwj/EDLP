@@ -39,18 +39,21 @@ import win32con
 import win32gui
 import win32api
 import win32process
-#import numpy as np
-from PIL import Image
-from PIL import ImageGrab
 import signal
 import time
 import smtplib
+import win32clipboard as wc
+#import numpy as np
+from PIL import Image
+from PIL import ImageGrab
+from faker import Factory
+from faker import Faker
 from selenium import webdriver
 from email.mime.text import MIMEText
 from email.utils import formataddr
 from sys import argv
 from ftplib import FTP
-import win32clipboard as wc
+
 #import itchat
 #from itchat.content import *
 # 禁用安全请求警告
@@ -1352,7 +1355,34 @@ class control:
                print("Sth wrong in capture!")
                return True
          return True
-
+   def genfaker(self,num):
+      faker = Faker("zh_CN")
+      file = 'Result\\card.txt'
+      if os.path.exists(file):
+         os.remove(file)
+         pass
+      f = open('Result\\card.txt','a')
+      i = 0
+      while(i < num):
+         #f.writelines("姓名: ")
+         #f.writelines(faker.name())
+         #f.writelines("\n")
+         f.writelines("电话号码: ")
+         f.writelines(faker.phone_number())
+         f.writelines("\n")
+         f.writelines("18位身份证号: ")
+         f.writelines(faker.ssn())
+         f.writelines("\n")
+         f.writelines("信用卡卡号: ")
+         f.writelines(faker.credit_card_number(card_type=None))
+         #f.writelines("\n")
+         #f.writelines("地址: ")
+         #f.writelines(faker.address())
+         f.writelines("\n----------------------------------------\n")
+         #f.writelines(["phone: " + faker.phone_number() + "\n","user sn: " + faker.ssn() + "\n","bank card: " + faker.credit_card_number(card_type=None) + "\n"])
+         i = i + 1
+      f.close()
+      return True
 if __name__ == "__main__":
     app = control()
     def usage():
@@ -1365,7 +1395,7 @@ if __name__ == "__main__":
         sys.exit()
 
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "h12345v", ["help","version"])
+        opts, args = getopt.getopt(sys.argv[1:], "h123456v", ["help","version"])
     except getopt.GetoptError:
         print("argv error,please input")
 
@@ -1391,5 +1421,10 @@ if __name__ == "__main__":
             #time.sleep(3)
             #app.GenImage()
             app.sftp_up()
+        elif cmd in ("-6", "--get"):
+            #app.window_capture()
+            #time.sleep(3)
+            #app.GenImage()
+            app.genfaker(10)
         elif cmd in ("-v", "--version"):
             print("version 1.0")
